@@ -44,6 +44,7 @@ CREATE TABLE transactions (
   stage transaction_stage NOT NULL DEFAULT 'intake',
   status transaction_status NOT NULL DEFAULT 'active',
   closing_date date,
+  risk_score smallint NOT NULL DEFAULT 0 CHECK (risk_score >= 0 AND risk_score <= 100),
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );

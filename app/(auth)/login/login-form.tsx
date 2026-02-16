@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") ?? "/dashboard";
+  const redirect = searchParams.get("redirect") ?? "/onboarding";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [magicSent, setMagicSent] = useState(false);
@@ -62,9 +62,12 @@ export function LoginForm() {
 
   if (magicSent) {
     return (
-      <p className="text-sm text-muted-foreground">
-        Check your email for a sign-in link.
-      </p>
+      <div className="rounded-lg border border-border bg-muted/30 p-4">
+        <p className="text-sm font-medium text-foreground">Check your email</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          We sent a sign-in link to {email}. Click the link to sign in. The link expires in 1 hour.
+        </p>
+      </div>
     );
   }
 

@@ -23,14 +23,14 @@ export function SignupForm() {
     const { error: err } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: `${window.location.origin}/dashboard` },
+      options: { emailRedirectTo: `${window.location.origin}/onboarding` },
     });
     setLoading(false);
     if (err) {
       setError(err.message);
       return;
     }
-    router.push("/dashboard");
+    router.push("/onboarding");
     router.refresh();
   }
 
@@ -38,7 +38,7 @@ export function SignupForm() {
     setError(null);
     await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/auth/callback?next=/dashboard` },
+      options: { redirectTo: `${window.location.origin}/auth/callback?next=/onboarding` },
     });
   }
 

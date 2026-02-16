@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const { pathname } = request.nextUrl;
-  const isDashboard = pathname.startsWith("/dashboard");
+  const isDashboard = pathname.startsWith("/dashboard") || pathname === "/onboarding";
   const isAuthPage = pathname === "/login" || pathname === "/signup";
 
   if (!url || !anonKey) {
@@ -40,7 +40,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isAuthPage && user) {
-    const redirectTo = request.nextUrl.searchParams.get("redirect") ?? "/dashboard";
+    const redirectTo = request.nextUrl.searchParams.get("redirect") ?? "/onboarding";
     return NextResponse.redirect(new URL(redirectTo, request.url));
   }
 

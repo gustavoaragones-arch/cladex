@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AuthFooter } from "@/components/layout/auth-footer";
 import { SignupForm } from "./signup-form";
 
 export const dynamic = "force-dynamic";
@@ -30,13 +31,7 @@ export default function SignupPage() {
           </p>
         </div>
       </main>
-      <footer className="border-t border-border py-4">
-        <div className="container mx-auto px-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground justify-center">
-          <Link href="/legal/terms">Terms</Link>
-          <Link href="/legal/privacy">Privacy</Link>
-          <Link href="/legal/disclaimer">Disclaimer</Link>
-        </div>
-      </footer>
+      <AuthFooter />
     </div>
   );
 }
