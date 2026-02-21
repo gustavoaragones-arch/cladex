@@ -6,7 +6,7 @@ import { StageProgressBar } from "./stage-progress-bar";
 import { TaskListGrouped } from "./task-list-grouped";
 import { RiskRadar } from "./risk-radar";
 import { Button } from "@/components/ui/button";
-import type { advanceStage, toggleTask } from "@/app/(dashboard)/dashboard/transactions/[id]/actions";
+import type { advanceStage, toggleTask } from "@/app/dashboard/transactions/[id]/actions";
 import type { TransactionDisplayData } from "@/lib/transaction/types";
 import type { TasksByStage } from "@/lib/transaction/types";
 

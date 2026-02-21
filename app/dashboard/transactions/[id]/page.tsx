@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireUser } from "@/lib/auth";
 import { groupTasksByStage, getTransactionDisplayData } from "@/lib/transaction";
 import { TransactionDetail } from "@/components/transaction/transaction-detail";
-import { advanceStage, toggleTask } from "@/app/(dashboard)/dashboard/transactions/[id]/actions";
+import { advanceStage, toggleTask } from "@/app/dashboard/transactions/[id]/actions";
 
 export default async function TransactionPage({
   params,

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { toggleTask } from "@/app/(dashboard)/dashboard/transactions/[id]/actions";
+import type { toggleTask } from "@/app/dashboard/transactions/[id]/actions";
 import type { TasksByStage } from "@/lib/transaction/types";
 
 type TaskListGroupedProps = {

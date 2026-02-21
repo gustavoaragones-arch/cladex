@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { toggleTask } from "@/app/(dashboard)/dashboard/transactions/[id]/actions";
+import { toggleTask } from "@/app/dashboard/transactions/[id]/actions";
 
 type TaskWithTx = {
   id: string;

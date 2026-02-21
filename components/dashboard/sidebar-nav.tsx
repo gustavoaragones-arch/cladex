@@ -27,7 +27,7 @@ const nav = [
   { href: "/dashboard/offers", label: "Offers", icon: Receipt },
   { href: "/dashboard/documents", label: "Documents", icon: FolderOpen },
   { href: "/dashboard/tasks", label: "Tasks", icon: CheckSquare },
-  { href: "/dashboard/risk", label: "Risk Radar", icon: AlertTriangle },
+  { href: "/dashboard/risk-radar", label: "Risk Radar", icon: AlertTriangle },
   { href: "/dashboard/professionals", label: "Professionals", icon: Users },
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
