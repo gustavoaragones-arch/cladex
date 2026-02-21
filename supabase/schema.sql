@@ -59,6 +59,10 @@ CREATE TABLE offers (
   closing_days smallint NOT NULL DEFAULT 0,
   appraisal_gap numeric(14, 2),
   risk_score smallint NOT NULL DEFAULT 0 CHECK (risk_score >= 0 AND risk_score <= 100),
+  risk_breakdown jsonb,
+  risk_explanation jsonb,
+  net_proceeds numeric(14, 2),
+  rank integer,
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
@@ -122,6 +126,7 @@ CREATE INDEX idx_transactions_status ON transactions(status);
 
 CREATE INDEX idx_offers_transaction_id ON offers(transaction_id);
 CREATE INDEX idx_offers_risk_score ON offers(risk_score);
+CREATE INDEX idx_offers_risk_score_idx ON offers(transaction_id, risk_score DESC);
 
 CREATE INDEX idx_tasks_transaction_id ON tasks(transaction_id);
 CREATE INDEX idx_tasks_due_date ON tasks(due_date);

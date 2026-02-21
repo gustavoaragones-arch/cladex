@@ -20,9 +20,12 @@ export default async function OffersPage() {
     txIds.length > 0
       ? await supabase
           .from("offers")
-          .select("id, transaction_id, price, financing_type, down_payment_percent, risk_score")
+          .select(
+            "id, transaction_id, price, financing_type, down_payment_percent, risk_score, rank, risk_breakdown, risk_explanation, net_proceeds"
+          )
           .in("transaction_id", txIds)
           .order("transaction_id")
+          .order("risk_score", { ascending: false })
           .order("price", { ascending: false })
       : { data: null };
   const offers = offersData ?? [];
@@ -38,7 +41,7 @@ export default async function OffersPage() {
     })
   );
 
-  const rows = offers.map((o, idx) => ({
+  const rows = offers.map((o) => ({
     id: o.id,
     transactionId: o.transaction_id,
     address: txMap.get(o.transaction_id) ?? "—",
@@ -46,7 +49,10 @@ export default async function OffersPage() {
     financing: o.financing_type ?? "—",
     downPaymentPercent: Number(o.down_payment_percent),
     riskScore: o.risk_score ?? 0,
-    rank: idx + 1,
+    rank: o.rank ?? null,
+    riskBreakdown: o.risk_breakdown as Record<string, number> | null,
+    riskExplanation: o.risk_explanation as Record<string, string> | null,
+    netProceeds: o.net_proceeds != null ? Number(o.net_proceeds) : null,
   }));
 
   return (
