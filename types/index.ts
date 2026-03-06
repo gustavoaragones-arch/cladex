@@ -1,1 +1,2 @@
-export type { User } from "@supabase/supabase-js";
+export * from './database'
+export * from './auth'

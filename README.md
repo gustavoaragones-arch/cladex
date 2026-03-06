@@ -1,14 +1,16 @@
-# Cladex
+# Cladex.io — Phase 1: Infrastructure Foundation
 
-Structured, legally-safe workflow software for real estate transactions. Not a broker, attorney, escrow provider, or financial advisor.
+Structured transaction workflow software for real estate. *Not a broker. Not legal advice.*
 
 ## Stack
 
-- **Next.js 14+** (App Router)
-- **TypeScript** (strict)
-- **TailwindCSS** + shadcn-style UI
-- **Supabase** (Auth, DB, Storage)
-- **Stripe** (foundation only; no payments implemented yet)
+- **Framework:** Next.js 14 (App Router)
+- **Language:** TypeScript (strict)
+- **Styling:** TailwindCSS
+- **UI:** shadcn/ui (button, input, label, card, separator, badge, toast)
+- **Backend:** Supabase (auth + database)
+- **Payments:** Stripe (scaffold only; full logic in Phase 7)
+- **Deploy:** Vercel-ready
 
 ## Setup
 
@@ -20,32 +22,26 @@ npm install
 
 ### 2. Environment variables
 
-Copy the example env file and fill in values:
+Copy `.env.example` to `.env.local` and fill in:
+
+- **Supabase:** Create a project at [supabase.com](https://supabase.com). Set `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`.
+- **Stripe:** For local dev you can use test keys from [Stripe Dashboard](https://dashboard.stripe.com). Set `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, and `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`. Build and static pages work without these; the Stripe webhook and any Stripe server logic require them.
+- **App:** `NEXT_PUBLIC_APP_URL` (e.g. `http://localhost:3000` for local).
+
+### 3. Supabase schema
+
+Run the SQL from `supabase/schema.sql` in the Supabase SQL Editor (Dashboard → SQL Editor). This creates tables, RLS policies, and the trigger that creates a `public.users` row when a user signs up.
+
+### 4. shadcn/ui (optional for Phase 1)
 
 ```bash
-cp .env.example .env.local
+npx shadcn@latest init
+npx shadcn@latest add button input label card separator badge toast
 ```
 
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon (public) key |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (server-only) |
-| `STRIPE_SECRET_KEY` | Stripe secret key |
-| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key |
-| `NEXT_PUBLIC_APP_URL` | Optional; app URL for redirects (e.g. `https://cladex.io`) |
+Phase 1 uses minimal inline styles; you can adopt shadcn components in later phases.
 
-### 3. Supabase
-
-1. Create a project at [supabase.com](https://supabase.com).
-2. In **Authentication → URL Configuration**, set:
-   - **Site URL**: `http://localhost:3000` (dev) or your production URL.
-   - **Redirect URLs**: add `http://localhost:3000/auth/callback` and your production callback URL.
-3. Enable **Email** and **Google** (or other) providers under **Authentication → Providers**.
-4. Copy project URL and anon key into `.env.local`.
-
-### 4. Local development
+### 5. Run locally
 
 ```bash
 npm run dev
@@ -53,39 +49,26 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-### 5. Build
+## What’s included (Phase 1)
 
-```bash
-npm run build
-npm start
-```
+- **Auth:** Email/password and magic link sign-in, signup, sign-out. Supabase OAuth callback at `/api/auth/callback`. Route protection via middleware (dashboard routes require auth; auth pages redirect to dashboard when already signed in).
+- **Dashboard:** Protected layout with sidebar and topbar. Stub pages: Dashboard, Properties, Transactions, Offers, Documents, Tasks, Risk Radar, Professionals, Billing, Settings.
+- **Public:** Placeholder home at `/`. Legal stubs: Terms, Privacy, Not a Broker disclaimer. Footer with legal links on public/auth pages.
+- **API:** `/api/auth/callback` (OAuth/magic link), `/api/auth/signout` (POST), `/api/stripe/webhook` (scaffold; no business logic).
+- **Design:** CSS variables and Tailwind theme per spec. Inter font. No gradients, no decorative animations. Regulatory disclaimer component.
 
-## Project structure
+## Scripts
 
-```
-/app
-  /(auth)          # login, signup
-  /(dashboard)      # protected dashboard + layout
-  /api              # API routes (auth, stripe webhook)
-  /legal            # terms, privacy, disclaimer
-/components         # UI components
-/lib                # supabase, stripe, auth, utils
-/types
-/styles
-```
+- `npm run dev` — development server
+- `npm run build` — production build
+- `npm run start` — run production build
+- `npm run lint` — ESLint
+- `npx tsc --noEmit` — type-check (zero errors expected)
 
-## Auth
+## Vercel
 
-- Email + password and magic link via Supabase Auth.
-- Google OAuth: configure in Supabase dashboard and use the same callback URL.
-- Dashboard routes are protected; unauthenticated users are redirected to `/login`.
-- Session is handled server-side with cookies (`@supabase/ssr`; Supabase recommends this over `@supabase/auth-helpers-nextjs` for App Router).
+Connect the repo to Vercel and set the same env vars. Ensure `NEXT_PUBLIC_APP_URL` is your production URL. Stripe webhook URL: `https://<your-domain>/api/stripe/webhook`.
 
-## Deployment (Vercel)
+## Phase 1 only
 
-1. Connect the repo to Vercel.
-2. Set all env vars in the Vercel project.
-3. In Supabase, add your production URL and `https://<your-domain>/auth/callback` to redirect URLs.
-4. Deploy.
-
-No local-only code; build should pass with `npm run build`.
+No transaction engine, offer scoring, or business logic. All such areas are placeholders or comments for later phases.

@@ -1,32 +1,31 @@
-import { stripe } from "@/lib/stripe";
-import { NextResponse } from "next/server";
-import type Stripe from "stripe";
+// Stripe webhook scaffold — Phase 7 implements full event handling
+// Do NOT add business logic here yet
+
+import { getStripe } from '@/lib/stripe'
+import { headers } from 'next/headers'
+import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-  if (!webhookSecret || !stripe) {
-    return NextResponse.json({ error: "Stripe not configured" }, { status: 503 });
+  const body = await request.text()
+  const headersList = await headers()
+  const sig = headersList.get('stripe-signature')
+
+  if (!sig || !process.env.STRIPE_WEBHOOK_SECRET) {
+    return NextResponse.json({ error: 'Missing signature or secret' }, { status: 400 })
   }
 
-  const body = await request.text();
-  const sig = request.headers.get("stripe-signature");
-  if (!sig) {
-    return NextResponse.json({ error: "Missing stripe-signature" }, { status: 400 });
-  }
+  let event
 
-  let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
+    const stripe = getStripe()
+    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET)
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Unknown error";
-    return NextResponse.json({ error: `Webhook signature verification failed: ${message}` }, { status: 400 });
+    console.error('Stripe webhook signature verification failed:', err)
+    return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
   }
 
-  switch (event.type) {
-    default:
-      // Unhandled event type
-      break;
-  }
+  // Phase 7 handles these events
+  console.log(`[Stripe Webhook] Received: ${event.type}`)
 
-  return NextResponse.json({ received: true });
+  return NextResponse.json({ received: true })
 }

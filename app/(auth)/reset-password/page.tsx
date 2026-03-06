@@ -1,36 +1,28 @@
-import Link from "next/link";
-import { AuthFooter } from "@/components/layout/auth-footer";
-import { ResetPasswordForm } from "./reset-password-form";
+// Request password reset — sends reset email. Phase 3 may add reset form and token handling.
 
-export const dynamic = "force-dynamic";
+import { Footer } from '@/components/layout/Footer'
+
+export const dynamic = 'force-dynamic'
+import { MagicLinkForm } from '@/components/auth/MagicLinkForm'
 
 export default function ResetPasswordPage() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="border-b border-border bg-background">
-        <div className="container mx-auto flex h-14 items-center px-4">
-          <Link href="/" className="text-lg font-semibold text-foreground">
-            Cladex
-          </Link>
-        </div>
-      </header>
-      <main className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-sm space-y-8">
-          <div>
-            <h1 className="text-xl font-semibold text-foreground">Set new password</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Enter your new password below.
-            </p>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 16px' }}>
+        <div style={{ width: '100%', maxWidth: '400px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+            <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#1A1A2E', marginBottom: '6px' }}>Reset password</h1>
+            <p style={{ fontSize: '14px', color: '#6B7280' }}>Request a magic link to sign in or reset your password.</p>
           </div>
-          <ResetPasswordForm />
-          <p className="text-center text-sm text-muted-foreground">
-            <Link href="/login" className="text-primary hover:underline">
-              Back to sign in
-            </Link>
+          <div style={{ border: '1px solid #D1D5DB', borderRadius: '6px', padding: '32px', backgroundColor: '#FFFFFF' }}>
+            <MagicLinkForm />
+          </div>
+          <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: '#6B7280' }}>
+            <a href="/login" style={{ color: '#1A1A2E', fontWeight: 500, textDecoration: 'none' }}>Back to Sign In</a>
           </p>
         </div>
       </main>
-      <AuthFooter />
+      <Footer />
     </div>
-  );
+  )
 }

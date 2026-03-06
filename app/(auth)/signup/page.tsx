@@ -1,37 +1,33 @@
-import Link from "next/link";
-import { AuthFooter } from "@/components/layout/auth-footer";
-import { SignupForm } from "./signup-form";
+import { SignupForm } from '@/components/auth/SignupForm'
+import { Footer } from '@/components/layout/Footer'
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic'
 
 export default function SignupPage() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="border-b border-border bg-background">
-        <div className="container mx-auto flex h-14 items-center px-4">
-          <Link href="/" className="text-lg font-semibold text-foreground">
-            Cladex
-          </Link>
-        </div>
-      </header>
-      <main className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-sm space-y-8">
-          <div>
-            <h1 className="text-xl font-semibold text-foreground">Create account</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Email and password or continue with Google.
-            </p>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 16px' }}>
+        <div style={{ width: '100%', maxWidth: '400px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+            <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#1A1A2E', marginBottom: '6px' }}>Cladex</h1>
+            <p style={{ fontSize: '14px', color: '#6B7280' }}>Create your account</p>
           </div>
-          <SignupForm />
-          <p className="text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link href="/login" className="text-primary hover:underline">
-              Sign in
-            </Link>
+          <div style={{ border: '1px solid #D1D5DB', borderRadius: '6px', padding: '32px', backgroundColor: '#FFFFFF' }}>
+            <SignupForm />
+          </div>
+          <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: '#6B7280' }}>
+            Already have an account?{' '}
+            <a href="/login" style={{ color: '#1A1A2E', fontWeight: 500, textDecoration: 'none' }}>Sign in</a>
+          </p>
+          <p style={{ textAlign: 'center', marginTop: '12px', fontSize: '11px', color: '#9CA3AF' }}>
+            By creating an account, you agree to our{' '}
+            <a href="/legal/terms" style={{ color: '#6B7280' }}>Terms of Service</a>{' '}
+            and{' '}
+            <a href="/legal/privacy" style={{ color: '#6B7280' }}>Privacy Policy</a>.
           </p>
         </div>
       </main>
-      <AuthFooter />
+      <Footer />
     </div>
-  );
+  )
 }

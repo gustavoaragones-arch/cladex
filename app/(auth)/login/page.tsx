@@ -1,44 +1,29 @@
-import Link from "next/link";
-import { AuthFooter } from "@/components/layout/auth-footer";
-import { Suspense } from "react";
-import { LoginForm } from "./login-form";
+// Full login page with email/password and magic link tabs
 
-export const dynamic = "force-dynamic";
+import { LoginForm } from '@/components/auth/LoginForm'
+
+export const dynamic = 'force-dynamic'
+import { Footer } from '@/components/layout/Footer'
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="border-b border-border bg-background">
-        <div className="container mx-auto flex h-14 items-center px-4">
-          <Link href="/" className="text-lg font-semibold text-foreground">
-            Cladex
-          </Link>
-        </div>
-      </header>
-      <main className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-sm space-y-8">
-          <div>
-            <h1 className="text-xl font-semibold text-foreground">Sign in</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Use your email or continue with Google.
-            </p>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 16px' }}>
+        <div style={{ width: '100%', maxWidth: '400px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+            <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#1A1A2E', marginBottom: '6px' }}>Cladex</h1>
+            <p style={{ fontSize: '14px', color: '#6B7280' }}>Sign in to your account</p>
           </div>
-          <Suspense fallback={<p className="text-muted-foreground">Loading…</p>}>
+          <div style={{ border: '1px solid #D1D5DB', borderRadius: '6px', padding: '32px', backgroundColor: '#FFFFFF' }}>
             <LoginForm />
-          </Suspense>
-          <p className="text-center text-sm text-muted-foreground">
-            No account?{" "}
-            <Link href="/signup" className="text-primary hover:underline">
-              Sign up
-            </Link>
-            {" · "}
-            <Link href="/forgot-password" className="text-primary hover:underline">
-              Forgot password
-            </Link>
+          </div>
+          <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: '#6B7280' }}>
+            Don&apos;t have an account?{' '}
+            <a href="/signup" style={{ color: '#1A1A2E', fontWeight: 500, textDecoration: 'none' }}>Sign up</a>
           </p>
         </div>
       </main>
-      <AuthFooter />
+      <Footer />
     </div>
-  );
+  )
 }

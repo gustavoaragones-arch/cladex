@@ -1,55 +1,63 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
+import { createServerClient } from '@supabase/ssr'
+import { NextResponse, type NextRequest } from 'next/server'
 
-type SupabaseCookie = {
-  name: string;
-  value: string;
-  options?: CookieOptions;
-};
+type CookieToSet = { name: string; value: string; options?: Record<string, unknown> }
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  let supabaseResponse = NextResponse.next({ request })
 
-  // Only protect dashboard routes
-  if (!pathname.startsWith("/dashboard")) {
-    return NextResponse.next();
-  }
-
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!url || !anonKey) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  const response = NextResponse.next();
-
-  const supabase = createServerClient(url, anonKey, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() { return request.cookies.getAll() },
+        setAll(cookiesToSet: CookieToSet[]) {
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+          supabaseResponse = NextResponse.next({ request })
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          )
+        },
       },
-      setAll(cookiesToSet: SupabaseCookie[]) {
-        cookiesToSet.forEach(({ name, value, options }) => {
-          response.cookies.set(name, value, options);
-        });
-      },
-    },
-  });
+    }
+  )
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(loginUrl);
+  const pathname = request.nextUrl.pathname
+
+  // Protect all dashboard routes
+  const isDashboardRoute = pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/properties') ||
+    pathname.startsWith('/transactions') ||
+    pathname.startsWith('/offers') ||
+    pathname.startsWith('/documents') ||
+    pathname.startsWith('/tasks') ||
+    pathname.startsWith('/risk-radar') ||
+    pathname.startsWith('/professionals') ||
+    pathname.startsWith('/billing') ||
+    pathname.startsWith('/settings')
+
+  if (!user && isDashboardRoute) {
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = '/login'
+    redirectUrl.searchParams.set('redirectTo', pathname)
+    return NextResponse.redirect(redirectUrl)
   }
 
-  return response;
+  // Redirect authenticated users away from auth pages
+  if (user && (pathname === '/login' || pathname === '/signup')) {
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = '/dashboard'
+    return NextResponse.redirect(redirectUrl)
+  }
+
+  return supabaseResponse
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
-};
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|api/auth/callback|api/stripe).*)',
+  ],
+}
