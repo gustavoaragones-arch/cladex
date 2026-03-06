@@ -10,7 +10,7 @@ export async function getUser(): Promise<User | null> {
 
 export async function requireUser(): Promise<User> {
   const user = await getUser()
-  if (!user) redirect('/login')
+  if (!user) redirect('/signin')
   return user
 }
 
@@ -21,7 +21,6 @@ export async function getUserProfile(userId: string) {
     .select('*')
     .eq('id', userId)
     .single()
-
   if (error) return null
   return data
 }

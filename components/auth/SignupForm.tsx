@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import Button from '@components/Button'
 
 export function SignupForm() {
   const [email, setEmail] = useState('')
@@ -16,42 +17,49 @@ export function SignupForm() {
     e.preventDefault()
     setLoading(true)
     setError(null)
-
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: { emailRedirectTo: `${window.location.origin}/api/auth/callback` },
     })
-
-    if (error) {
-      setError(error.message)
-      setLoading(false)
-      return
-    }
-
-    // Redirect to onboarding (Phase 3 builds onboarding — redirect to dashboard for now)
+    if (error) { setError(error.message); setLoading(false); return }
     router.push('/dashboard')
     router.refresh()
   }
 
   return (
-    <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <div>
-        <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#0A0A0A', marginBottom: '6px' }}>Email</label>
-        <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" />
-      </div>
-      <div>
-        <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#0A0A0A', marginBottom: '6px' }}>Password</label>
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="Min. 8 characters" minLength={8} />
-      </div>
-      {error && <p style={{ fontSize: '13px', color: '#B91C1C' }}>{error}</p>}
-      <button
-        type="submit"
-        disabled={loading}
-        style={{ padding: '10px', backgroundColor: loading ? '#6B7280' : '#0A0A0A', color: '#FFFFFF', border: 'none', borderRadius: '4px', fontSize: '14px', fontWeight: 500, cursor: loading ? 'not-allowed' : 'pointer' }}
-      >
-        {loading ? 'Creating account...' : 'Create Account'}
-      </button>
-    </form>
+    <>
+      <form onSubmit={handleSignup}>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className=" w-full rounded-xl shadow-sm border border-gray-100 placeholder:text-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent mb-6"
+          placeholder="Email address"
+          name="email"
+          required
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className=" w-full rounded-xl shadow-sm border border-gray-100 placeholder:text-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent mb-6"
+          placeholder="Password"
+          name="password"
+          required
+          minLength={8}
+        />
+        {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
+        <Button
+          type="submit"
+          as="button"
+          variant="large"
+          className="rounded-2xl py-2 w-full"
+          disabled={loading}
+        >
+          {loading ? 'Creating account...' : 'Create Account'}
+        </Button>
+      </form>
+    </>
   )
 }

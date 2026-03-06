@@ -1,9 +1,9 @@
 import { requireUser } from '@/lib/auth'
-import { Sidebar } from '@/components/layout/Sidebar'
-import { Topbar } from '@/components/layout/Topbar'
+import { Sidebar } from '@/components/dashboard/Sidebar'
+import { Topbar } from '@/components/dashboard/Topbar'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  await requireUser() // Redirect to /login if not authenticated
+  await requireUser()
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#FFFFFF' }}>

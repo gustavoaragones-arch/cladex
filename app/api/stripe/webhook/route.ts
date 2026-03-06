@@ -1,6 +1,4 @@
-// Stripe webhook scaffold — Phase 7 implements full event handling
-// Do NOT add business logic here yet
-
+// Phase 7 implements full event handling
 import { getStripe } from '@/lib/stripe'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
@@ -14,18 +12,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Missing signature or secret' }, { status: 400 })
   }
 
-  let event
-
   try {
     const stripe = getStripe()
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET)
+    const event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET)
+    console.log(`[Stripe Webhook] Received: ${event.type}`)
   } catch (err) {
-    console.error('Stripe webhook signature verification failed:', err)
+    console.error('Stripe webhook error:', err)
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
   }
-
-  // Phase 7 handles these events
-  console.log(`[Stripe Webhook] Received: ${event.type}`)
 
   return NextResponse.json({ received: true })
 }

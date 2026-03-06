@@ -21,11 +21,7 @@ export function formatDate(date: string | Date): string {
   }).format(new Date(date))
 }
 
-export function estimateCommission(propertyValue: number): {
-  low: number
-  high: number
-  midpoint: number
-} {
+export function estimateCommission(propertyValue: number) {
   return {
     low: propertyValue * 0.05,
     high: propertyValue * 0.06,

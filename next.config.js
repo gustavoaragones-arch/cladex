@@ -1,13 +1,6 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
+  reactStrictMode: false,
   experimental: {
-    serverActions: {
-      allowedOrigins: ['localhost:3000'],
-    },
   },
-  images: {
-    remotePatterns: [],
-  },
-}
-
-module.exports = nextConfig
+};

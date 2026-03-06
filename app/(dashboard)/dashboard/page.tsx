@@ -1,4 +1,5 @@
 import { requireUser } from '@/lib/auth'
+import { DisclaimerBanner } from '@/components/dashboard/DisclaimerBanner'
 
 export default async function DashboardPage() {
   const user = await requireUser()
@@ -10,20 +11,18 @@ export default async function DashboardPage() {
           Dashboard
         </h1>
         <p style={{ fontSize: '14px', color: '#6B7280' }}>
-          Welcome back{user.email ? `, ${user.email}` : ''}.
+          Welcome back, {user.email}
         </p>
       </div>
 
-      {/* Empty state — Phase 2+ populates with real transaction data */}
-      <div
-        style={{
-          border: '1px solid #D1D5DB',
-          borderRadius: '6px',
-          padding: '48px 32px',
-          textAlign: 'center',
-          backgroundColor: '#F7F7F7',
-        }}
-      >
+      <div style={{
+        border: '1px solid #D1D5DB',
+        borderRadius: '6px',
+        padding: '48px 32px',
+        textAlign: 'center',
+        backgroundColor: '#F7F7F7',
+        marginBottom: '24px',
+      }}>
         <p style={{ fontSize: '15px', color: '#6B7280', marginBottom: '20px' }}>
           No active transactions yet.
         </p>
@@ -43,6 +42,8 @@ export default async function DashboardPage() {
           Create Transaction
         </a>
       </div>
+
+      <DisclaimerBanner variant="global" />
     </div>
   )
 }

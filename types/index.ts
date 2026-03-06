@@ -1,2 +1,8 @@
-export * from './database'
-export * from './auth'
+export type {
+  Database,
+  UserRole,
+  TransactionStage,
+  TransactionStatus,
+  RiskSeverity,
+  PaymentStatus,
+} from './database'
